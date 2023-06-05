@@ -1,0 +1,258 @@
+{{unit "cdmf.unit.lib.qrcode"}}
+{{unit "cdmf.unit.device.type.qr-modal"}}
+{{#zone "topCss"}}
+    {{css "css/terminal.css"}}
+{{/zone}}
+{{#if deviceFound}}
+    {{#if isAuthorized}}
+
+        {{#zone "device-thumbnail"}}
+          <i class="fw fw-android device-type fw-2x"></i>
+        {{/zone}}
+
+        {{#zone "device-details-header"}}
+            <h1 class="device-id"
+                data-deviceid="{{device.deviceIdentifier}}"
+                data-type="{{device.type}}"
+                data-ownership="{{device.ownership}}"
+                data-owner="{{device.owner}}"
+                data-status="{{device.status}}"
+                data-deviceinfoservice="{{device.deviceInfoServiceAPI}}"
+                data-devicelocationservice="{{device.deviceLocationServiceAPI}}">
+            {{device.owner}}'s {{device.name}}
+              <a id="device-info-tooltip" href="#" data-toggle="tooltip" title="Device Identifier: {{device.deviceIdentifier}}
+              Firmware Build Date: {{device.osBuildDate}}
+              UDID: {{device.udid}}">
+                <i class="fw fw-info"></i>
+              </a>
+            </h1>
+            {{#if device.model}}
+              <h4>{{device.vendor}} {{device.model}}</h4>
+            {{/if}}
+            <h4>Ownership - <strong>{{device.ownership}}</strong></h4>
+            <h4>Device is
+              <strong>
+                {{#equal device.status "ACTIVE"}}Active{{/equal}}
+                {{#equal device.status "INACTIVE"}}Inactive{{/equal}}
+                {{#equal device.status "BLOCKED"}}Blocked{{/equal}}
+                {{#equal device.status "REMOVED"}}Removed{{/equal}}
+                {{#equal device.status "UNREACHABLE"}}Unreachable{{/equal}}
+              </strong>
+            </h4>
+        {{/zone}}
+
+        {{#zone "device-opetations"}}
+            {{#if device.isNotRemoved}}
+                <div class="operation-container">
+                  <div class="operation-title">
+                      <h4>Device Operations</h4>
+                  </div>
+                    {{unit "cdmf.unit.device.type.android.operation-bar" device=device
+                           backendApiUri=backendApiUri autoCompleteParams=autoCompleteParams}}
+                </div>
+            {{/if}}
+        {{/zone}}
+
+        {{#zone "device-details"}}
+          <div class="vital-strip">
+            {{#if device.deviceInfoAvailable}}
+              {{#if device.BatteryLevel}}
+                <p title="Battery level percentage" data-toggle="tooltip">
+                    <i class="icon fw fw-battery fw-2x"></i>
+                    <span>{{device.BatteryLevel.value}}%</span>
+                </p>
+              {{/if}}
+              {{#if device.ramUsage}}
+                <p title="RAM usage percentage" data-toggle="tooltip">
+                    <i class="icon fw fw-hardware fw-2x fw-rotate-90"></i>
+                    <span>{{device.ramUsage.value}}%</span>
+                </p>
+              {{/if}}
+              {{#if device.internalMemory}}
+                <p title="Free space / Total available internal storage" data-toggle="tooltip">
+                    <i class="icon fw fw-hdd fw-2x fw-rotate-90"></i>
+                    <span>{{device.internalMemory.usage}}</span>
+                    <span class="memory-amt">GB Free/{{device.internalMemory.total}}GB Total</span>
+                </p>
+              {{/if}}
+              {{#if device.externalMemory}}
+                <p title="Free space / Total available external storage" data-toggle="tooltip">
+                    <i class="icon fw fw-usb-drive fw-2x"></i>
+                    <span>{{device.externalMemory.usage}}</span>
+                    <span class="memory-amt">GB Free/{{device.externalMemory.total}}GB Total</span>
+                </p>
+              {{/if}}
+            {{else}}
+              <p>Battery, RAM and Storage related information are not available yet.</p>
+            {{/if}}
+          </div>
+        {{/zone}}
+
+        {{#zone "device-details-tab-injected"}}
+            <li>
+                <a data-toggle="tab" href="#location"
+                   data-lat="{{device.location.latitude}}"
+                   data-long="{{device.location.longitude}}"
+                   class="initGeoLocationLink">Location</a>
+            </li>
+            <li><a data-toggle="tab" href="#app">Applications</a></li>
+            <li><a data-toggle="tab" href="#policy">Policy Compliance</a></li>
+	    <li><a data-toggle="tab" href="#remote-session">Remote Session</a></li>
+        {{/zone}}
+
+        {{#zone "device-view-tab-injected-conents"}}
+            <div id="location" class="tab-pane fade">
+              {{#if device.location}}
+                  <div class="tab-actions">
+                      <div class="action-btn-container" id="location-action-bar">
+                      </div>
+                  </div>
+                  <br/>
+                  {{unit "cdmf.unit.geo-dashboard" device=device noGeoFencing=false hideSearch=true}}
+              {{else}}
+                  <div id="map-error" class="message message-warning">
+                      <h4 class="remove-margin">
+                          <i class="icon fw fw-warning"></i>
+                          The device location information is not available right now! Please refresh the page in a few minutes.
+                          The location details will not be available if the device’s “Location Services setting” is disabled
+                          or if WSO2 IoT Server has not received the device’s location information from the device.
+                      </h4>
+                  </div>
+                  <p class="add-padding-5x"></p>
+                  <p class="add-padding-5x"></p>
+                  <p class="add-padding-5x"></p>
+              {{/if}}
+            </div>
+            <div id="app" class="tab-pane fade">
+                <div class="tab-actions">
+                    <div class="action-btn-container">
+                        <div class="action-btn show filter">
+                            <a href="javascript:void(0);" id="refresh-apps">
+                                <i class="fw fw-refresh"></i> Refresh List
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div id="apps-spinner" class="wr-advance-operations-init hidden">
+                    <i class="fw fw-wso2-logo fw-pulse fw-2x"></i> Loading Application List...
+                </div>
+              <div id="applications-list-container" data-public-uri="{{@unit.publicUri}}">
+              </div>
+            </div>
+            <div id="policy" class="tab-pane fade">
+              <div id="policy-list-container">
+              </div>
+            </div>
+            <div id="remote-session" class="tab-pane fade" data-remote-session-uri="{{remoteSessionEndpoint}}">
+                <div class="remote-session-container">
+                    <div class="tab-actions">
+                        <div class="action-btn-container">
+                            <div class="action-btn show filter">
+                                <a href="javascript:void(0);" id="btn-connect-device">
+                                    <i class="fw fw-mobile"></i> Connect to Device
+                                </a>
+                                <a href="javascript:void(0);" class="hidden" id="btn-close-remote-session">
+                                    <i class="fw fw-mobile"></i> Close Session
+                                </a>
+                                <div id="loading-remote-session" class="hidden">
+                                    <i class="fw fw-sync fw-spin fw-2x"></i>
+                                    <label id="lbl-remote-session-status"></label>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div id="remote-session-operations" class="hidden">
+                        <div id="remote-session-operations-bar">
+                            <ul class="nav nav-pills">
+                                <li class="active">
+                                    <a href="#1a" data-toggle="tab">
+                                        <span>Shell</span>
+                                    </a>
+                                </li>
+                                <li><a href="#2a" data-toggle="tab">
+                                    <span>Logcat</span>
+                                </a>
+                                </li>
+ 				                <li><a href="#3a" data-toggle="tab">
+                                    <span>Screen Share</span>
+                                </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div id="remote-session-operations-center" class="tab-content clearfix">
+                                <div class="tab-pane active" id="1a">
+                                    <div id="loading-terminal" class="hidden">
+                                        <i class="fw fw-loader fw-spin"></i>
+                                        <span>Executing shell command...</span>
+                                    </div>
+                                    <textarea id="shell-command" class="terminal" autocomplete="on"
+                                              placeholder="Write your shell command here and press Enter..."
+                                              required></textarea>
+                                    <textarea id="shell-response" class="terminal" readonly rows="20"></textarea>
+                                </div>
+                                <div class="tab-pane" id="2a">
+                                    <a href="javascript:void(0);" id="btn-refresh-logCat">
+                                        <i class="fw fw-refresh"></i> Refresh Logcat
+                                    </a>
+                                    <div id="loading-logcat" class="hidden">
+                                        <i class="fw fw-loader fw-spin"></i>
+                                        <span>Fetching Logcat....</span>
+                                    </div>
+                                    <textarea id="logcat-response" readonly rows="30"></textarea>
+                                </div>
+                                <div class="tab-pane" id="3a">
+                                    <button  id="btn-start-screen" type="button" class="btn btn-success">
+                                                            Start
+                                    </button>
+                                    <div id="loading-screen" class="hidden">
+                                        <i class="fw fw-loader fw-spin"></i>
+                                        <span>Start Screen Sharing....</span>
+                                    </div>
+                                    <div id="remote-control-pannel" class="hidden">
+                                        <canvas id="canvas"></canvas>
+                                    </div>
+                                    <button  id="btn-stop-screen" type="button" class="btn btn-danger hidden">
+                                                            Stop
+                                    </button>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{/zone}}
+
+        </div>
+        </div>
+    {{else}}
+        <h1 class="page-sub-title">
+            Permission Denied
+        </h1>
+        <br>
+        You are not authorized to view specified device in the system.
+    {{/if}}
+{{else}}
+    <h1 class="page-sub-title">
+        Device not found
+    </h1>
+    <br>
+    You have tried to access either a removed or non-existing device.
+{{/if}}
+
+{{#zone "bottomJs"}}
+    {{#if isAuthorized}}
+        <!--suppress HtmlUnknownTarget -->
+        <script id="policy-view" src="{{@unit.publicUri}}/templates/policy-compliance.hbs"
+                data-device-id="{{device.deviceIdentifier}}" data-device-type="{{device.type}}"
+                type="text/x-handlebars-template"></script>
+        <!--suppress HtmlUnknownTarget -->
+        <script id="applications-list" src="{{@unit.publicUri}}/templates/applications-list.hbs"
+                data-device-id="{{device.deviceIdentifier}}" data-device-type="{{device.type}}"
+                type="text/x-handlebars-template"></script>
+        <!--suppress HtmlUnknownTarget -->
+        {{js "js/device-detail.js"}}
+        {{js "js/remote-session.js"}}
+        {{js "js/jquery.touchSwipe.min.js"}}
+    {{/if}}
+{{/zone}}

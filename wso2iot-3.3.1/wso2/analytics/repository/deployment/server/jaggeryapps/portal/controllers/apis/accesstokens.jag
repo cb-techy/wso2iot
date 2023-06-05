@@ -1,0 +1,56 @@
+<%
+/**
+ *  Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
+ *  WSO2 Inc. licenses this file to you under the Apache License,
+ *  Version 2.0 (the "License"); you may not use this file except
+ *  in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ *
+ */
+function getAccessToken(callBack) {
+    var dashboards = require('/modules/dashboards.js');
+    var usr = require('/modules/user.js');
+    var tokenUtil = require("/modules/oauth/token-handler-utils.js")["utils"];
+    // check whether the user is logged in
+    var user = usr.current();
+    if (!user) {
+        return "UNAUTHORIZED_ERROR";
+    }
+
+    // match url for patterns
+    var matcher = new URIMatcher(request.getRequestURI());
+    if (matcher.match('/accesstokens/{id}')) {
+        if (tokenUtil.checkOAuthEnabled()) {
+            tokenUtil.getAccessToken(function (accessToken) {
+                if (accessToken == null || accessToken == "") {
+                    log.error("/controllers/apis/accesstokens.jag: Access token has not been set yet");
+                    callBack({"accessToken": ""});
+                } else {
+                    callBack({"accessToken": accessToken});
+                }
+            });
+        } else {
+            log.warn("/controllers/apis/accesstokens.jag: Please enable oauth as authorization mechanism in" +
+                    " designer.json");
+            return callBack({"accessToken": ""});
+        }
+    }
+}
+
+var accessTokenInfo = {"accessToken": ""};
+getAccessToken(function(tokenInfo){
+    accessTokenInfo = tokenInfo;
+});
+
+print(accessTokenInfo);
+%>

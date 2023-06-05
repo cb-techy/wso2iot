@@ -1,0 +1,20 @@
+#Wed Oct 31 10:51:28 UTC 2018
+repositories/file\:_home_jenkins_workspace_products_product-iots_modules_p2-profile_iot-core-profile_target_wso2carbon-core-4.4.26_wso2_components/provider=
+repositories/file\:_home_jenkins_workspace_products_product-iots_modules_p2-profile_iot-core-profile_target_wso2carbon-core-4.4.26_wso2_components_p2_org.eclipse.equinox.p2.core_cache/name=download cache
+repositories/file\:_home_jenkins_workspace_products_product-iots_modules_p2-profile_iot-core-profile_target_wso2carbon-core-4.4.26_wso2_components_p2_org.eclipse.equinox.p2.core_cache/enabled=true
+repositories/file\:_home_jenkins_workspace_products_product-iots_modules_p2-profile_iot-core-profile_target_wso2carbon-core-4.4.26_wso2_components_p2_org.eclipse.equinox.p2.core_cache/type=org.eclipse.equinox.p2.artifact.repository.simpleRepository
+repositories/file\:_home_jenkins_workspace_products_product-iots_modules_p2-profile_iot-core-profile_target_wso2carbon-core-4.4.26_wso2_components_p2_org.eclipse.equinox.p2.core_cache/isSystem=true
+eclipse.preferences.version=1
+repositories/file\:_home_jenkins_workspace_products_product-iots_modules_p2-profile_iot-core-profile_target_wso2carbon-core-4.4.26_wso2_components/version=1.0.0
+repositories/file\:_home_jenkins_workspace_products_product-iots_modules_p2-profile_iot-core-profile_target_wso2carbon-core-4.4.26_wso2_components_p2_org.eclipse.equinox.p2.core_cache/provider=
+repositories/file\:_home_jenkins_workspace_products_product-iots_modules_p2-profile_iot-core-profile_target_wso2carbon-core-4.4.26_wso2_components/description=
+repositories/file\:_home_jenkins_workspace_products_product-iots_modules_p2-profile_iot-core-profile_target_wso2carbon-core-4.4.26_wso2_components/name=Bundle pool
+repositories/file\:_home_jenkins_workspace_products_product-iots_modules_p2-profile_iot-core-profile_target_wso2carbon-core-4.4.26_wso2_components_p2_org.eclipse.equinox.p2.core_cache/description=
+repositories/file\:_home_jenkins_workspace_products_product-iots_modules_p2-profile_iot-core-profile_target_wso2carbon-core-4.4.26_wso2_components/suffix=artifacts.xml
+repositories/file\:_home_jenkins_workspace_products_product-iots_modules_p2-profile_iot-core-profile_target_wso2carbon-core-4.4.26_wso2_components_p2_org.eclipse.equinox.p2.core_cache/uri=file\:/home/jenkins/workspace/products/product-iots/modules/p2-profile/iot-core-profile/target/wso2carbon-core-4.4.26/wso2/components/p2/org.eclipse.equinox.p2.core/cache/
+repositories/file\:_home_jenkins_workspace_products_product-iots_modules_p2-profile_iot-core-profile_target_wso2carbon-core-4.4.26_wso2_components/enabled=true
+repositories/file\:_home_jenkins_workspace_products_product-iots_modules_p2-profile_iot-core-profile_target_wso2carbon-core-4.4.26_wso2_components/isSystem=true
+repositories/file\:_home_jenkins_workspace_products_product-iots_modules_p2-profile_iot-core-profile_target_wso2carbon-core-4.4.26_wso2_components/type=org.eclipse.equinox.p2.artifact.repository.simpleRepository
+repositories/file\:_home_jenkins_workspace_products_product-iots_modules_p2-profile_iot-core-profile_target_wso2carbon-core-4.4.26_wso2_components_p2_org.eclipse.equinox.p2.core_cache/suffix=artifacts.xml
+repositories/file\:_home_jenkins_workspace_products_product-iots_modules_p2-profile_iot-core-profile_target_wso2carbon-core-4.4.26_wso2_components/uri=file\:/home/jenkins/workspace/products/product-iots/modules/p2-profile/iot-core-profile/target/wso2carbon-core-4.4.26/wso2/components/
+repositories/file\:_home_jenkins_workspace_products_product-iots_modules_p2-profile_iot-core-profile_target_wso2carbon-core-4.4.26_wso2_components_p2_org.eclipse.equinox.p2.core_cache/version=1.0.0
